@@ -1,0 +1,16 @@
+library(igraph)
+library("sparsebn")
+mydata = read.table("filtered_rpkm.txt",header=T,sep="\t")
+mydata = mydata[c(7,8,11,12,15,16),]
+mydata_white = read.table("white_list_TF_AP1",header=F,sep="\t")
+whitelist <- as.matrix(mydata_white)
+mydata_data <- as.data.frame(mydata)
+cyto.data <- sparsebnData(mydata_data, type = "continuous",ivn =NULL)
+cyto.learn <- estimate.dag(cyto.data, whitelist = whitelist,lambdas.length = 10)
+m <- get.adjacency.matrix(cyto.learn[[2]])
+g <- graph.adjacency(m)
+save(cyto.learn ,m ,g,file = "sparsebn.Rdata")
+nm = get.edgelist(g)
+write.table(nm, file = "mm2.txt", sep = "\t",row.names = TRUE, quote=F)
+write.csv(nm, "data2.csv", row.names=T, quote=F)
+
