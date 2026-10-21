@@ -1,0 +1,11 @@
+name: bayesian-network-nextflow
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - r-base=4.3
+  - r-igraph
+  - r-bnlearn
+  - r-foreach
+  - r-doparallel
+  - r-sparsebn
