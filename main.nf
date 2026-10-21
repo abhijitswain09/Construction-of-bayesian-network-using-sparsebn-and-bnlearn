@@ -5,16 +5,22 @@ params.outdir = 'results'
 process SPARSEBN {
   tag 'sparsebn'
   conda "${projectDir}/environment.yml"
-  input: path expression; path whitelist
-  output: path 'sparsebn.Rdata'; path 'mm2.txt'; path 'data2.csv', optional: true
+  input:
+  path expression
+  path whitelist
+  path script
+  output:
+  path 'sparsebn.Rdata', emit: model
+  path 'mm2.txt', emit: edges
+  path 'data2.csv', optional: true, emit: csv
   script:
   """
   cp "${expression}" filtered_rpkm.txt
   cp "${whitelist}" whitelist_TF_AP1
-  Rscript sparsebn.R
+  Rscript "${script}"
   """
 }
 workflow {
   if (!params.expression || !params.whitelist) error 'Provide --expression and --whitelist'
-  SPARSEBN(file(params.expression, checkIfExists: true), file(params.whitelist, checkIfExists: true))
+  SPARSEBN(file(params.expression, checkIfExists: true), file(params.whitelist, checkIfExists: true), file("${projectDir}/sparsebn.R", checkIfExists: true))
 }
