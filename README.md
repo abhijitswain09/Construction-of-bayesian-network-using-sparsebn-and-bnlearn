@@ -66,3 +66,14 @@ If you wish to contribute to this project, feel free to open issues, submit pull
 Thank you for using this Bayesian Network Construction repository. If you have any questions or encounter any issues, please don't hesitate to contact us.
 
 Happy modeling!
+
+
+## Nextflow workflow
+
+Run the existing sparsebn analysis through Nextflow with Conda:
+
+```bash
+nextflow run main.nf -profile conda --expression expression.tsv --whitelist whitelist.tsv --outdir results
+```
+
+The expression matrix and two-column whitelist should match the format expected by `sparsebn.R`. The workflow publishes the RData model and edge table. Package versions are described in `environment.yml`.
